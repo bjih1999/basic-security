@@ -1,11 +1,13 @@
 package io.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -19,8 +21,10 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -67,7 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             response.sendRedirect("login"); // 앞에 logoutSuccessUrl을 설정하였기 때문에 사실 여기서 처리 안해줘도 상관 없음
                         }
                     })
-                    .deleteCookies("remember-me");                      // 쿠키 삭제
+                    .deleteCookies("remember-me")                      // 쿠키 삭제
+                .and()
+                    .rememberMe()                               // 리멤버 미 인증을 사용하겠다.
+                    .rememberMeParameter("remeber")             // 체크박스의 파라미터 이름, default "remeber-me"
+                    .tokenValiditySeconds(3600)                 // 토큰 유효기간, default 14일
+                    .userDetailsService(userDetailsService)   // 토큰 발급을 위한 정보 조회
+        ;
+
     }
 
 }
