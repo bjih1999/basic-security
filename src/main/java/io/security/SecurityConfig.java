@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureUrl("/login")               // 로그인 실패 시 리다이렉션 URI
                     .usernameParameter("userId")        // ID 파라미터명 설정
                     .passwordParameter("passwd")        // 비밀번호 파라미터명 설정
-                    .loginProcessingUrl("/login_proc")  //
+                    .loginProcessingUrl("/login_proc")  // 로그인 form action URI
                     .successHandler(new AuthenticationSuccessHandler() {
                         @Override
                         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -49,4 +49,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     })
                     .permitAll();
     }
+
 }
