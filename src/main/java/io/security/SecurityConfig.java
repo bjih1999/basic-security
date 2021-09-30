@@ -76,7 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .rememberMe()                               // 리멤버 미 인증을 사용하겠다.
                     .rememberMeParameter("remeber")             // 체크박스의 파라미터 이름, default "remeber-me"
                     .tokenValiditySeconds(3600)                 // 토큰 유효기간, default 14일
-                    .userDetailsService(userDetailsService)   // 토큰 발급을 위한 정보 조회
+                    .userDetailsService(userDetailsService  )   // 토큰 발급을 위한 정보 조회
+                .and()
+                    .sessionManagement()                // 세션관리를 활성화하겠다.
+                    .maximumSessions(1)                     // 최대 허용 가능 세션 수, -1은 무제한 로그인 세션 허용
+                    .maxSessionsPreventsLogin(true)         // 동시 로그인 차단, default는 false
+                    .expiredUrl("/expired")                 // 세션이 만료된 경우 이동할 페이지
         ;
 
     }
