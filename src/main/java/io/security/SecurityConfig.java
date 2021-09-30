@@ -79,6 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .userDetailsService(userDetailsService  )   // 토큰 발급을 위한 정보 조회
                 .and()
                     .sessionManagement()                // 세션관리를 활성화하겠다.
+//                    .sessionFixation()                      // 세션 고정 공격
+//                    .changeSessionId()                      // 인증마다 세션 재발급이며 기본값이다.
                     .maximumSessions(1)                     // 최대 허용 가능 세션 수, -1은 무제한 로그인 세션 허용
                     .maxSessionsPreventsLogin(true)         // 동시 로그인 차단, default는 false
                     .expiredUrl("/expired")                 // 세션이 만료된 경우 이동할 페이지
