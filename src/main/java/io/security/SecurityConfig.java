@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -78,12 +79,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .tokenValiditySeconds(3600)                 // 토큰 유효기간, default 14일
                     .userDetailsService(userDetailsService  )   // 토큰 발급을 위한 정보 조회
                 .and()
-                    .sessionManagement()                // 세션관리를 활성화하겠다.
-//                    .sessionFixation()                      // 세션 고정 공격
-//                    .changeSessionId()                      // 인증마다 세션 재발급이며 기본값이다.
-                    .maximumSessions(1)                     // 최대 허용 가능 세션 수, -1은 무제한 로그인 세션 허용
-                    .maxSessionsPreventsLogin(true)         // 동시 로그인 차단, default는 false
-                    .expiredUrl("/expired")                 // 세션이 만료된 경우 이동할 페이지
+                    .sessionManagement()                                        // 세션관리를 활성화하겠다.
+//                    .sessionFixation()                                            // 세션 고정 공격
+//                    .changeSessionId()                                            // 인증마다 세션 재발급이며 기본값이다.
+//                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)     // 기본값, 스프링 시큐리티가 필요시 세션을 생성
+                                                                                        /*
+                                                                                        세션 정책
+                                                                                        SessionCreationPolicy.Always : 스프링 시큐리티가 항상 세션 생성
+                                                                                        SessionCreationPolicy.If_Required : 스프링 시큐리티가 필요 시 세션 생성
+                                                                                        SessionCreationPolicy.Never : 스프링 시큐리티가 세션을 생성하지 않지만 이미 존재하면 사용
+                                                                                        SessionCreationPolicy.Stateless : 스프링 시큐리티가 세션을 생성하지 읺고 존재해도 사용하지 않음 (JWT와 같은 토큰 기반 인증 방식일 때 사용될듯)
+                                                                                         */
+                    .maximumSessions(1)                                             // 최대 허용 가능 세션 수, -1은 무제한 로그인 세션 허용
+                    .maxSessionsPreventsLogin(true)                                 // 동시 로그인 차단, default는 false
+                    .expiredUrl("/expired")                                         // 세션이 만료된 경우 이동할 페이지
         ;
 
     }
