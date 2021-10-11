@@ -2,6 +2,7 @@ package io.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,10 +11,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                     .authorizeRequests()
+                    .antMatchers("/login").permitAll()
                     .antMatchers("/user").hasRole("USER")
                     .antMatchers("/admin/pay").hasRole("ADMIN")
                     .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
@@ -69,7 +76,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         @Override
                         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                             System.out.println("authentication " + authentication.getName());
-                            response.sendRedirect("/");
+                            RequestCache requestCache = new HttpSessionRequestCache();
+                            SavedRequest savedRequest = requestCache.getRequest(request, response);
+                            String redirectUrl = savedRequest.getRedirectUrl();
+                            response.sendRedirect(redirectUrl);
                         }
                     })
                     .failureHandler(new AuthenticationFailureHandler() {
@@ -80,6 +90,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         }
                     })
                     .permitAll()
+
+                .and()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new AuthenticationEntryPoint() {
+                        @Override
+                        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+                            response.sendRedirect("/login");
+                        }   // 스프링 시큐리티가 제공하는 loging Url이 아닌 사용자가 컨트롤러에 정의한 URL로 흘러들어감
+                    })
+                    .accessDeniedHandler(new AccessDeniedHandler() {
+                        @Override
+                        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                            response.sendRedirect("/denied");
+                        }
+                    })
+
                 .and()
                     .logout()                                       // 로그아웃 설정을 하겠다. **logout 요청은 원칙적으로 POST이어야함!!**
                     .logoutSuccessUrl("/login")                         // 로그아웃 성공시 리다이렉션 URI
