@@ -1,6 +1,7 @@
 package io.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
@@ -50,12 +51,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .withUser("sys")
                     .password(password)
-                    .roles("MANAGER")
+                    .roles("MANAGER", "USER")
                 .and()
                     .withUser("admin")
                     .password(password)
-                    .roles("ADMIN")
+                    .roles("ADMIN", "MANAGER", "USER")
         ;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());    // 정적 파일들이 보안 필터를 거치지 않음 ex) "css/", "js/", "images/", "webjars/"
+                                                                                                // Q: 그러면 permitAll과 다른 점은 무엇이냐?
+                                                                                                // A: permitAll은 보안 필터를 거치긴 한다(익명 사용자를 허용하는 등) 하지만 web.ignoring은 아예 필터를 거치지 않는다.
     }
 
     @Bean
