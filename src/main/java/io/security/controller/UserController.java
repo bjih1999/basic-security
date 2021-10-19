@@ -23,12 +23,12 @@ public class UserController {
         return "user/mypage";
     }
 
-    @GetMapping("/user")
+    @GetMapping(value = "/users")
     public String createUser() {
         return "user/login/register";
     }
 
-    @PostMapping("/user")
+    @PostMapping(value = "/users")
     public String createUser(AccountDto accountDto) {
 
         ModelMapper modelMapper = new ModelMapper();

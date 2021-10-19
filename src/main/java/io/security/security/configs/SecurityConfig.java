@@ -1,4 +1,4 @@
-package io.security;
+package io.security.security.configs;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -37,26 +37,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    private final UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        String password = passwordEncoder().encode("1111");
-        auth
-                    .inMemoryAuthentication()
-                    .withUser("user")
-                    .password(password)
-                    .roles("USER")
-                .and()
-                    .withUser("sys")
-                    .password(password)
-                    .roles("MANAGER", "USER")
-                .and()
-                    .withUser("admin")
-                    .password(password)
-                    .roles("ADMIN", "MANAGER", "USER")
-        ;
+        auth.
+                    userDetailsService(userDetailsService);
     }
 
     @Override
