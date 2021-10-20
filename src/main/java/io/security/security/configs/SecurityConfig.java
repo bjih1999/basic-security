@@ -1,5 +1,6 @@
 package io.security.security.configs;
 
+import io.security.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -39,11 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
+    private final CustomAuthenticationProvider customAuthenticationProvider;
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.
-                    userDetailsService(userDetailsService);
+//                    userDetailsService(userDetailsService);
+                    authenticationProvider(customAuthenticationProvider);
     }
 
     @Override
@@ -51,11 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());    // 정적 파일들이 보안 필터를 거치지 않음 ex) "css/", "js/", "images/", "webjars/"
                                                                                                 // Q: 그러면 permitAll과 다른 점은 무엇이냐?
                                                                                                 // A: permitAll은 보안 필터를 거치긴 한다(익명 사용자를 허용하는 등) 하지만 web.ignoring은 아예 필터를 거치지 않는다.
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     //    @Override
