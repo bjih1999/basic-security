@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -40,14 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
-    private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final AuthenticationProvider authenticationProvider;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.
 //                    userDetailsService(userDetailsService);
-                    authenticationProvider(customAuthenticationProvider);
+                    authenticationProvider(authenticationProvider);
     }
 
     @Override
@@ -89,6 +90,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         .and()
                 .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login_proc")
+                .defaultSuccessUrl("/")
+                .permitAll();
         ;
     }
     //    @Override
