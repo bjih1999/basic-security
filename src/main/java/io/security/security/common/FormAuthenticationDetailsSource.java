@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 
 /*
+AuthenticationDetailsSource
 WebAuthenticationDetails를 생성하는 클래스
 디폴트가 아닌 커스텀한 WebAuthenticationDetails를 생성하도록 buildDetails 메소드 오버라이딩
  */
