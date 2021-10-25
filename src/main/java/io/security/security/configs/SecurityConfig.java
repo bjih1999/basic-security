@@ -46,6 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationDetailsSource authenticationDetailsSource;
 
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -97,6 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login_proc")
                 .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/")
+                .successHandler(authenticationSuccessHandler)
                 .permitAll();
         ;
     }
