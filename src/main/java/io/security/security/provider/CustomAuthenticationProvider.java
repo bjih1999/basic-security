@@ -45,9 +45,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Bad Credential");
         }
 
+        /*
+        authentication의 detail 객체를 리턴받아 커스텀 인증 로직 추가
+         */
         FormWebAuthenticationDetails details = (FormWebAuthenticationDetails) authentication.getDetails();
         String secretKey = details.getSecretKey();
-        if (secretKey == null || "secret".equals(secretKey)) {
+        if (secretKey == null || !"secret".equals(secretKey)) {
             throw new InsufficientAuthenticationException("InsufficientAuthenticationException");
         }
 
