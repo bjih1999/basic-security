@@ -50,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
+    private final AccessDeniedHandler accessDeniedHandler;
+
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -91,20 +93,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/users", "/login*").permitAll()
                 .antMatchers("/mypage").hasRole("USER")
-                .antMatchers("/massages").hasRole("MANAGER")
+                .antMatchers("/messages").hasRole("MANAGER")
                 .antMatchers("/config").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
-        .and()
+            .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login_proc")
+                .defaultSuccessUrl("/")
                 .authenticationDetailsSource(authenticationDetailsSource)
                 .defaultSuccessUrl("/")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
-                .permitAll();
+                .permitAll()
         ;
+
+        http
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler);  // 인가 예외 처리를 받아 처리하는 핸들러 등록
+
     }
     //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {

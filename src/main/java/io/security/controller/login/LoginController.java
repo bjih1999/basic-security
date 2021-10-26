@@ -1,6 +1,8 @@
 package io.security.controller.login;
 
+import io.security.controller.login.Dto.AccessDeniedExceptionDto;
 import io.security.controller.login.Dto.LoginExceptionDto;
+import io.security.domain.Account;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -17,7 +19,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login(@ModelAttribute LoginExceptionDto loginExceptionDto, Model model) {
-
         model.addAttribute("error", loginExceptionDto.getError());
         model.addAttribute("exception", loginExceptionDto.getException());
         return "user/login/login";
@@ -33,6 +34,17 @@ public class LoginController {
         }
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/denied")
+    public String accessDenied(@ModelAttribute AccessDeniedExceptionDto accessDeniedExceptionDto, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Account account = (Account)authentication.getPrincipal();
+
+        model.addAttribute("username", account.getUsername());
+        model.addAttribute("exception", accessDeniedExceptionDto.getException());
+
+        return "user/login/denied";
     }
 
 }

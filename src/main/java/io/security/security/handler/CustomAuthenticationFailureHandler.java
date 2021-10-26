@@ -21,13 +21,13 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 //        String errorMessage = exception.getMessage();
 
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                                        .fromHttpUrl("http://localhost:8080")
-                                        .path("/login")
-                                        .queryParam("error", true)
-                                        .queryParam("exception", exception.getMessage())
-                                        .build()
-                                        .encode()
+        UriComponents uriComponents = UriComponentsBuilder
+                                            .fromHttpUrl("http://localhost:8080")
+                                            .path("/login")
+                                            .queryParam("error", true)
+                                            .queryParam("exception", exception.getMessage())
+                                            .build()
+                                            .encode()
                                         ;
         //로그인 URL에 쿼리스트링으로 에러 메세지를 전달함으로써, 로그인 화면에서 오류 메세지를 받아 출력할 수 있게함
         setDefaultFailureUrl(uriComponents.toString());
