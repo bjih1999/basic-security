@@ -1,5 +1,6 @@
 package io.security.security.configs;
 
+import io.security.security.filter.AjaxLoginProcessingFilter;
 import io.security.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -23,6 +24,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -51,6 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
     private final AccessDeniedHandler accessDeniedHandler;
+
+    private final AjaxLoginProcessingFilter ajaxLoginProcessingFilter;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -111,7 +115,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler);  // 인가 예외 처리를 받아 처리하는 핸들러 등록
+                .accessDeniedHandler(accessDeniedHandler)  // 인가 예외 처리를 받아 처리하는 핸들러 등록
+        ;
+
+        http
+                .addFilterBefore(ajaxLoginProcessingFilter, UsernamePasswordAuthenticationFilter.class) //ajax 방식 요청
+        ;
 
     }
     //    @Override
