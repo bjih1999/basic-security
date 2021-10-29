@@ -3,8 +3,8 @@ package io.security.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.security.domain.Dto.AccountDto;
 import io.security.security.token.AjaxAuthenticationToken;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @Component
 public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public AjaxLoginProcessingFilter() {
         super(new AntPathRequestMatcher("/api/login"));
