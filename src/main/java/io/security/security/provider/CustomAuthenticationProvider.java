@@ -1,6 +1,5 @@
 package io.security.security.provider;
 
-import io.security.domain.Account;
 import io.security.security.common.FormWebAuthenticationDetails;
 import io.security.security.service.AccountContext;
 import lombok.RequiredArgsConstructor;

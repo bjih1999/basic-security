@@ -1,8 +1,10 @@
 package io.security.security.configs;
 
 //import io.security.security.filter.AjaxLoginProcessingFilter;
+import io.security.security.factory.UrlResourceMapFactoryBean;
 import io.security.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import io.security.security.provider.CustomAuthenticationProvider;
+import io.security.service.SecurityResourceSevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -64,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccessDeniedHandler accessDeniedHandler;
 
 //    private final AjaxLoginProcessingFilter ajaxLoginProcessingFilter;
+
+    private final SecurityResourceSevice securityResourceSevice;
 
     private final UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource;
 

@@ -1,6 +1,6 @@
 package io.security.controller;
 
-import io.security.domain.Account;
+import io.security.domain.entity.Account;
 import io.security.domain.Dto.AccountDto;
 import io.security.service.UserService;
 import lombok.RequiredArgsConstructor;

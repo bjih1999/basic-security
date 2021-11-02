@@ -2,7 +2,7 @@ package io.security.controller.login;
 
 import io.security.controller.login.Dto.AccessDeniedExceptionDto;
 import io.security.controller.login.Dto.LoginExceptionDto;
-import io.security.domain.Account;
+import io.security.domain.entity.Account;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;

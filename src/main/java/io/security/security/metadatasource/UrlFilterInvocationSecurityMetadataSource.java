@@ -10,11 +10,14 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@Component
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
 
+
+    public UrlFilterInvocationSecurityMetadataSource(LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap) {
+        this.requestMap = requestMap;
+    }
     /*
     요청 정보와 리소스(여기서는 URL)의 권한 정보를 비교
     SecurityConfig에서 이 정보를 FilterSecurityInterceptor를 감싸 새로운 bean으로 생성하여
