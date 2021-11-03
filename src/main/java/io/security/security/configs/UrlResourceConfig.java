@@ -15,7 +15,7 @@ public class UrlResourceConfig {
 
     @Bean
     public UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() throws Exception{
-        return new UrlFilterInvocationSecurityMetadataSource(urlResourceMapFactoryBean().getObject());
+        return new UrlFilterInvocationSecurityMetadataSource(urlResourceMapFactoryBean().getObject(), securityResourceSevice);
     }
 
     private UrlResourceMapFactoryBean urlResourceMapFactoryBean() {
